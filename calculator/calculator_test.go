@@ -6,10 +6,6 @@ import (
 	"testing"
 )
 
-func closeEnough(a, b, tolerance float64) bool {
-	return math.Abs(a-b) <= tolerance
-	}
-
 func TestAdd(t *testing.T) {
 t.Parallel()
 type testCase struct {
@@ -90,7 +86,7 @@ func TestMultiply(t *testing.T) {
 				t.Fatalf("want no error for valid input, got %v", err)
 				}
 			if !closeEnough(tc.want, got, 0.001) {
-				t.Errorf("Multiply(%f, %f), want %f, got %f", tc.a, tc.b, tc.want, got)
+				t.Errorf("Divide(%f, %f), want %f, got %f", tc.a, tc.b, tc.want, got)
 			}
 		}
 		}
@@ -104,3 +100,42 @@ func TestDivideInvalid(t *testing.T){
 	}
 
 }
+
+func TestSqrt(t *testing.T){
+	t.Parallel()
+
+	type testCase struct {
+		input float64;
+		want float64;
+	}
+	testCases := []testCase{
+		{input: 1, want: 1},
+		{input: 9,  want: 3},
+		{input: 0, want: 0},
+		{input: 1.4, want: 1.1832},
+	}
+
+	for _, tc := range testCases {
+		got, err := calculator.Sqrt(tc.input)
+		if err != nil {
+			t.Fatalf("want no error for valid input, got %v", err)
+			}
+		if !closeEnough(tc.want, got, 0.001) {
+			t.Errorf("Sqrt(%f), want %f, got %f", tc.input, tc.want, got)
+		}
+	}
+}
+
+func TestSqrtInvalid(t *testing.T){
+	t.Parallel()
+
+	_, err := calculator.Sqrt(-1)
+	if err == nil {
+		t.Fatalf("want error for invalid input, got nil")
+	}
+}
+
+
+func closeEnough(a, b, tolerance float64) bool {
+	return math.Abs(a-b) <= tolerance
+	}
