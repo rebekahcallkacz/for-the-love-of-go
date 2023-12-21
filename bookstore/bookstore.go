@@ -22,7 +22,9 @@ func Buy(b Book) (Book, error) {
 	return b, nil
 }
 
-func GetAllBooks(catalog map[int]Book) []Book {
+type Catalog map[int]Book
+
+func (catalog Catalog) GetAllBooks() []Book {
 	result := []Book{}
 	for _, b := range catalog {
 		result = append(result, b)
@@ -30,7 +32,7 @@ func GetAllBooks(catalog map[int]Book) []Book {
 	return result
 }
 
-func GetBook(catalog map[int]Book, ID int) (Book, error) {
+func (catalog Catalog) GetBook(ID int) (Book, error) {
 	b, ok := catalog[ID]
 	if !ok {
 		return Book{}, fmt.Errorf("ID %d doesn't exist", ID)
